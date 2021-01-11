@@ -11,6 +11,7 @@ import {
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import Color, { COLOR_WIDTH } from './Color';
+import Background from './Background';
 
 const colors = [
   {
@@ -47,6 +48,7 @@ const colors = [
 
 const snapPoints = colors.map((_, i) => -i * COLOR_WIDTH);
 
+
 const ColorSelection = () => {
   const [colorSelection, setColorSelection] = useState({
     previous: colors[0],
@@ -73,6 +75,7 @@ const ColorSelection = () => {
   return (
     <PanGestureHandler onGestureEvent={onGestureEvent}>
       <Animated.View style={styles.container}>
+        <Background colorSelection={colorSelection}/>
         <View style={styles.placeholder} />
         {
           colors.map((color, index) => {
@@ -84,6 +87,11 @@ const ColorSelection = () => {
                 translateX={translateX}
                 onPress={(position) => {
                   translateX.value = withSpring(-index * COLOR_WIDTH);
+                  setColorSelection({
+                    position,
+                    previous: colorSelection.current,
+                    current: color,
+                  });
                 }}
               />
             );
